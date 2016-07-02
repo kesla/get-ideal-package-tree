@@ -33,5 +33,8 @@
     "semistandard": "^8.0.0",
     "snazzy": "^4.0.0",
     "tapava": "^2.2.0"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.9.1"
   }
 }
