@@ -35,6 +35,7 @@
     "tapava": "^2.2.0"
   },
   "dependencies": {
-    "babel-polyfill": "^6.9.1"
+    "babel-polyfill": "^6.9.1",
+    "lodash.sortby": "^4.5.0"
   }
 }
