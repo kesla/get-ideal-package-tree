@@ -4,7 +4,7 @@
   "description": "Given a list of packages, returns a JSON representation of the ideal package tree",
   "main": "dist/index.js",
   "scripts": {
-    "test": "babel-tape-runner test.js && semistandard | snazzy",
+    "test": "babel-tape-runner test/*-test.js && semistandard | snazzy",
     "build": "rm -rf dist && mkdir -p dist && babel lib --out-dir dist",
     "watch": "rm -rf dist && mkdir -p dist && babel -w lib --out-dir dist",
     "prepublish": "npm run build"

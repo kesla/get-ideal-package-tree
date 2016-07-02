@@ -1,6 +1,5 @@
-import 'babel-polyfill';
 import test from 'tapava';
-import getIdealPackageTree from './lib';
+import getIdealPackageTree from '../lib';
 import assert from 'assert';
 
 const shouldNotBeCalled = () => { throw new Error('should not be called'); };
