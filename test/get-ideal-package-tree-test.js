@@ -101,3 +101,31 @@ test('multiple incompatible dependencies', function * (t) {
   };
   t.deepEqual(actual, expected);
 });
+
+test('mix compatible & incompatible', function * (t) {
+  const getPackage = setupGetPackage(Object.freeze({
+    foo: {name: 'foo', version: '1.0.0', dependencies: {
+      bar: '^2.0.0',
+      ban: '^1.0.0'
+    }},
+    'bar@^2.0.0': {name: 'bar', version: '2.1.2', dependencies: {
+      bas: '~1.0.0',
+      ban: '^1.0.0'
+    }},
+    'bas@~1.0.0': {name: 'bas', version: '1.0.5', dependencies: {
+      ban: '^2.0.0'
+    }},
+    'ban@^1.0.0': {name: 'ban', version: '1.0.0'},
+    'ban@^2.0.0': {name: 'ban', version: '2.0.0'}
+  }));
+  const actual = yield getIdealPackageTree(getPackage)(['foo']);
+  const expected = {
+    foo: {version: '1.0.0'},
+    bar: {version: '2.1.2'},
+    bas: {version: '1.0.5', dependencies: {
+      ban: {version: '2.0.0'}
+    }},
+    ban: {version: '1.0.0'}
+  };
+  t.deepEqual(actual, expected);
+});
