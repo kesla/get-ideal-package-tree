@@ -55,3 +55,49 @@ test('packages w nested dependencies that are all unique', function * (t) {
   };
   t.deepEqual(actual, expected);
 });
+
+test('multiple compatible dependencies', function * (t) {
+  const getPackage = setupGetPackage(Object.freeze({
+    foo: {
+      name: 'foo', version: '1', dependencies: {
+        bar: '^1.0.0'
+      }
+    },
+    'bar': {name: 'bar', version: '1.2.1'},
+    'bar@^1.0.0': {name: 'bar', version: '1.2.1'},
+    'bar@~1.2.0': {name: 'bar', version: '1.2.1'},
+    'bas': {name: 'bas', version: '1', dependencies: {
+      bar: '~1.2.0'
+    }}
+  }));
+  const actual = yield getIdealPackageTree(getPackage)(['foo', 'bar', 'bas']);
+  const expected = {
+    foo: {version: '1'},
+    bar: {version: '1.2.1'},
+    bas: {version: '1'}
+  };
+  t.deepEqual(actual, expected);
+});
+
+test('multiple incompatible dependencies', function * (t) {
+  const getPackage = setupGetPackage(Object.freeze({
+    foo: {
+      name: 'foo', version: '1', dependencies: {
+        bar: '^2.0.0'
+      }
+    },
+    'bar': {name: 'bar', version: '1.2.1'},
+    'bar@^2.0.0': {name: 'bar', version: '2.5.1'},
+    'bar@~0.8.0': {name: 'bar', version: '0.8.5'},
+    'bas': {name: 'bas', version: '1', dependencies: {
+      bar: '~0.8.0'
+    }}
+  }));
+  const actual = yield getIdealPackageTree(getPackage)(['foo', 'bar', 'bas']);
+  const expected = {
+    foo: {version: '1', dependencies: {bar: {version: '2.5.1'}}},
+    bar: {version: '1.2.1'},
+    bas: {version: '1', dependencies: {bar: {version: '0.8.5'}}}
+  };
+  t.deepEqual(actual, expected);
+});
