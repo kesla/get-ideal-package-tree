@@ -129,3 +129,23 @@ test('mix compatible & incompatible', function * (t) {
   };
   t.deepEqual(actual, expected);
 });
+
+test('cycle', function * (t) {
+  const getPackage = setupGetPackage(Object.freeze({
+    foo: {name: 'foo', version: '1.0.0', dependencies: {
+      bar: '2.0.0'
+    }},
+    'foo@1.0.0': {name: 'foo', version: '1.0.0', dependencies: {
+      bar: '2.0.0'
+    }},
+    'bar@2.0.0': {name: 'bar', version: '2.0.0', dependencies: {
+      foo: '1.0.0'
+    }}
+  }));
+  const actual = yield getIdealPackageTree(getPackage)(['foo']);
+  const expected = {
+    foo: {version: '1.0.0'},
+    bar: {version: '2.0.0'}
+  };
+  t.deepEqual(actual, expected);
+});
