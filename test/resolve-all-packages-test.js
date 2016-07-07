@@ -25,3 +25,24 @@ test('resolveAllPackages() packages w nested dependencies that are all unique', 
   };
   t.deepEqual(actual, expected);
 });
+
+test('resolveAllPackages() cycle', function * (t) {
+  const getPackage = setupGetPackage(Object.freeze({
+    foo: {name: 'foo', version: '1.0.0', dependencies: {
+      bar: '2.0.0'
+    }},
+    'foo@1.0.0': {name: 'foo', version: '1.0.0', dependencies: {
+      bar: '2.0.0'
+    }},
+    'bar@2.0.0': {name: 'bar', version: '2.0.0', dependencies: {
+      foo: '1.0.0'
+    }}
+  }));
+  const actual = yield resolveAllPackages(getPackage, ['foo']);
+  const expected = {
+    foo: { dependencies: [ 'bar@2.0.0' ], name: 'foo', version: '1.0.0' },
+    'bar@2.0.0': { dependencies: [ 'foo@1.0.0' ], name: 'bar', version: '2.0.0' },
+    'foo@1.0.0': { dependencies: [ 'bar@2.0.0' ], name: 'foo', version: '1.0.0' }
+  };
+  t.deepEqual(actual, expected);
+});
