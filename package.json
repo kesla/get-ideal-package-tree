@@ -1,13 +1,14 @@
 {
   "name": "get-ideal-package-tree",
   "version": "0.0.0",
-  "description": "Given a list of packages, returns a JSON representation of the ideal package tree",
+  "description": "Given a list of packages, returns a JSON representation of the ideal package tree - like how npm@3 would install it.",
   "main": "dist/index.js",
   "scripts": {
     "test": "babel-tape-runner test/*-test.js && semistandard | snazzy",
     "build": "rm -rf dist && mkdir -p dist && babel lib --out-dir dist",
     "watch": "rm -rf dist && mkdir -p dist && babel -w lib --out-dir dist",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "posttest": "readme package.json > readme.md"
   },
   "bin": {
     "get-ideal-package-tree": "bin/cli.js"

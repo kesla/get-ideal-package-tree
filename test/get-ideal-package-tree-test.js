@@ -1,5 +1,5 @@
 import test from 'tapava';
-import getIdealPackageTree from '../lib';
+import {inject as getIdealPackageTree} from '../lib';
 import assert from 'assert';
 
 const shouldNotBeCalled = () => { throw new Error('should not be called'); };
