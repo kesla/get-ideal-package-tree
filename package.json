@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.9.1",
+    "co": "^4.6.0",
     "get-package-json-from-registry": "^1.0.2",
     "immutable-object-methods": "^1.2.1"
   }
