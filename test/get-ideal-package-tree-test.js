@@ -149,3 +149,62 @@ test('cycle', function * (t) {
   };
   t.deepEqual(actual, expected);
 });
+
+test('handling input in alphabetic order', function * (t) {
+  const getPackage = setupGetPackage({
+    b: {
+      name: 'b', version: '1.0.0', dependencies: {
+        foo: '1.0.0'
+      }
+    },
+    a: {
+      name: 'a', version: '1.0.0', dependencies: {
+        foo: '2.0.0'
+      }
+    },
+    'foo@1.0.0': {name: 'foo', version: '1.0.0'},
+    'foo@2.0.0': {name: 'foo', version: '2.0.0'}
+  });
+  const actual = yield getIdealPackageTree(getPackage)(['b', 'a']);
+  const expected = {
+    a: {version: '1.0.0'},
+    b: {version: '1.0.0', dependencies: {
+      foo: {version: '1.0.0'}
+    }},
+    foo: {version: '2.0.0'}
+  };
+  t.deepEqual(actual, expected);
+});
+
+test('handling input in alphabetic order', function * (t) {
+  const getPackage = setupGetPackage({
+    'a@1.0.0': {
+      name: 'a', version: '1.0.0', dependencies: {
+        foo: '2.0.0'
+      }
+    },
+    'b@1.0.0': {
+      name: 'b', version: '1.0.0', dependencies: {
+        foo: '1.0.0'
+      }
+    },
+    'foo@1.0.0': {name: 'foo', version: '1.0.0'},
+    'foo@2.0.0': {name: 'foo', version: '2.0.0'},
+    input: {
+      name: 'input', version: '1.0.0', dependencies: {
+        b: '1.0.0',
+        a: '1.0.0'
+      }
+    }
+  });
+  const actual = yield getIdealPackageTree(getPackage)(['input']);
+  const expected = {
+    a: {version: '1.0.0'},
+    b: {version: '1.0.0', dependencies: {
+      foo: {version: '1.0.0'}
+    }},
+    foo: {version: '2.0.0'},
+    input: {version: '1.0.0'}
+  };
+  t.deepEqual(actual, expected);
+});
