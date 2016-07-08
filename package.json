@@ -1,6 +1,6 @@
 {
   "name": "get-ideal-package-tree",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Given a list of packages, returns a JSON representation of the ideal package tree - like how npm@3 would install it.",
   "main": "dist/index.js",
   "scripts": {
