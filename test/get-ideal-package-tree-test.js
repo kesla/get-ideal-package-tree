@@ -127,7 +127,10 @@ test('mix compatible & incompatible', function * (t) {
     }},
     ban: {version: '1.0.0'}
   };
+  const expectedKeys = Object.keys(expected).sort();
+  const actualKeys = Object.keys(actual);
   t.deepEqual(actual, expected);
+  t.deepEqual(actualKeys, expectedKeys);
 });
 
 test('cycle', function * (t) {
