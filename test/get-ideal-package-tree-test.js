@@ -131,6 +131,59 @@ test('regression', function * (t) {
   t.deepEqual(actual, expected);
 });
 
+test('regression', function * (t) {
+  const getPackage = setupGetPackage(Object.freeze({
+    package1: {name: 'package1', version: '1', dependencies: {
+      package2: '1',
+      package3: '1'
+    }},
+    'package2@1': {name: 'package2', version: '1', dependencies: {
+      package4: '1'
+    }},
+    'package2@2': {name: 'package2', version: '2'},
+    'package3@1': {name: 'package3', version: '1', dependencies: {
+      package4: '2'
+    }},
+    'package3@2': {name: 'package3', version: '2'},
+    'package4@1': {name: 'package4', version: '1'},
+    'package4@2': {name: 'package4', version: '2'},
+    'package4@3': {name: 'package4', version: '3'}
+  }));
+  const actual = yield getIdealPackageTree(getPackage)([
+    'package1', 'package2@2', 'package3@2', 'package4@3']);
+  const expected = {
+    package1: {
+      version: '1',
+      dependencies: {
+        package2: {
+          version: '1'
+        },
+        package3: {
+          version: '1',
+          dependencies: {
+            package4: {
+              version: '2'
+            }
+          }
+        },
+        package4: {
+          version: '1'
+        }
+      }
+    },
+    package2: {
+      version: '2'
+    },
+    package3: {
+      version: '2'
+    },
+    package4: {
+      version: '3'
+    }
+  };
+  t.deepEqual(actual, expected);
+});
+
 test('mix compatible & incompatible', function * (t) {
   const getPackage = setupGetPackage(Object.freeze({
     foo: {name: 'foo', version: '1.0.0', dependencies: {
