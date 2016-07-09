@@ -41,9 +41,10 @@ npm test
 
 ## Dependencies
 
-- [babel-polyfill](https://github.com/babel/babel/tree/master/packages): Given a list of packages, returns a JSON representation of the ideal package tree - like how npm@3 would install it.
-- [get-package-json-from-registry](https://github.com/kesla/get-package-json): Get package.json from registry, cached
-- [immutable-object-methods](https://github.com/micnews/immutable-object-methods): Update normal plain javascript object, immutable style. Simlar to how immutable.js, seamless-immutable etc does it but a lot smaller and simpler.
+- [babel-polyfill](https://github.com/babel/babel/tree/master/packages): 
+- [co](https://github.com/tj/co): generator async control flow goodness
+- [get-package-json-from-registry](https://github.com/kesla/get-package-json-from-registry): Get package.json from registry, cached
+- [object.entries](https://github.com/es-shims/Object.entries): ES7 spec-compliant Object.entries shim.
 
 ## Dev Dependencies
 
