@@ -41,7 +41,6 @@ npm test
 
 ## Dependencies
 
-- [babel-polyfill](https://github.com/babel/babel/tree/master/packages): 
 - [co](https://github.com/tj/co): generator async control flow goodness
 - [get-package-json-from-registry](https://github.com/kesla/get-package-json-from-registry): Get package.json from registry, cached
 - [object.entries](https://github.com/es-shims/Object.entries): ES7 spec-compliant Object.entries shim.
