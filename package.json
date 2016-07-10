@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "co": "^4.6.0",
-    "get-package-json-from-registry": "^1.0.2",
+    "get-package-json-from-registry": "^2.0.0",
     "immutable-object-methods": "^1.2.1",
     "object.entries": "^1.0.3"
   }
