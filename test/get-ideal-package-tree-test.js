@@ -293,3 +293,20 @@ test('handling input in alphabetic order', function * (t) {
   };
   t.deepEqual(actual, expected);
 });
+
+test('work w bundleDependencies', function * (t) {
+  const getPackage = setupGetPackage({
+    'a@1.0.0': {
+      name: 'a', version: '1.0.0', bundleDependencies: ['bundled'], dependencies: {
+        foo: '2.0.0', bundled: '3.0.0'
+      }
+    },
+    'foo@2.0.0': {name: 'foo', version: '2.0.0'}
+  });
+  const actual = yield getIdealPackageTree(getPackage)(['a@1.0.0']);
+  const expected = {
+    a: {version: '1.0.0'},
+    foo: {version: '2.0.0'}
+  };
+  t.deepEqual(actual, expected);
+});
