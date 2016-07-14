@@ -41,7 +41,6 @@ npm test
 
 ## Dependencies
 
-- [co](https://github.com/tj/co): generator async control flow goodness
 - [get-package-json-from-registry](https://github.com/kesla/get-package-json-from-registry): Get package.json from registry, cached
 - [immutable-object-methods](https://github.com/micnews/immutable-object-methods): Update normal plain javascript object, immutable style. Simlar to how immutable.js, seamless-immutable etc does it but a lot smaller and simpler.
 - [object.entries](https://github.com/es-shims/Object.entries): ES7 spec-compliant Object.entries shim.
