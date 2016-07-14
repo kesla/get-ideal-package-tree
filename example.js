@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 import getIdealPackageTree from 'get-ideal-package-tree';
 
 getIdealPackageTree(['browserify', 'watchify'])

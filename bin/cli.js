@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var args = process.argv.slice(2);
+const args = process.argv.slice(2);
 
 require('../dist')(args)
   .then(json => console.log(JSON.stringify(json, null, 2)))

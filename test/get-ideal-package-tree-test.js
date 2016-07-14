@@ -1,11 +1,19 @@
-import test from 'tapava';
-import {inject as getIdealPackageTree} from '../lib';
 import assert from 'assert';
 
-const shouldNotBeCalled = () => { throw new Error('should not be called'); };
+import test from 'tapava';
+import {set} from 'immutable-object-methods';
+import npa from 'npm-package-arg';
+
+import {inject as getIdealPackageTree} from '../lib';
+
+const shouldNotBeCalled = () => {
+  throw new Error('should not be called');
+};
 const setupGetPackage = obj => key => {
-  assert(obj[key], `${key} exists in ${JSON.stringify(obj)}`);
-  return Promise.resolve(obj[key]);
+  const pkg = obj[key];
+  assert(pkg, `${key} exists in ${JSON.stringify(obj)}`);
+
+  return Promise.resolve(set(pkg, '_requested', npa(key)));
 };
 
 test('empty array', function * (t) {
@@ -16,22 +24,22 @@ test('empty array', function * (t) {
 
 test('packages w no dependencies', function * (t) {
   const getPackage = setupGetPackage(Object.freeze({
-    foo: {name: 'foo', version: '1.0.0', extra: true},
+    'wrong@user/package#branch': {name: 'foo', version: '1.0.0', extra: true},
     'bar@latest': {name: 'bar', version: '3.0.0', dependencies: [], extra: true},
     '@scope/bas@1.2.0': {name: '@scope/bas', version: '1.2.0', extra: true}
   }));
   const actual = yield getIdealPackageTree(getPackage)([
-    'foo', '@scope/bas@1.2.0', 'bar@latest'
+    'wrong@user/package#branch', '@scope/bas@1.2.0', 'bar@latest'
   ]);
   const expected = {
     '@scope/bas': {
       version: '1.2.0'
     },
-    bar: {
+    'bar': {
       version: '3.0.0'
     },
-    foo: {
-      version: '1.0.0'
+    'foo': {
+      version: 'github:user/package#branch'
     }
   };
   t.deepEqual(actual, expected);
@@ -39,7 +47,7 @@ test('packages w no dependencies', function * (t) {
 
 test('packages w nested dependencies that are all unique', function * (t) {
   const getPackage = setupGetPackage(Object.freeze({
-    foo: {name: 'foo', version: '1.0.0', dependencies: {
+    'foo@https://github.com/user/package#branch': {name: 'foo', version: '1.0.0', dependencies: {
       bar: '^2.0.0'
     }},
     'bar@^2.0.0': {name: 'bar', version: '2.1.2', dependencies: {
@@ -47,9 +55,9 @@ test('packages w nested dependencies that are all unique', function * (t) {
     }},
     'bas@~1.0.0': {name: 'bas', version: '1.0.5'}
   }));
-  const actual = yield getIdealPackageTree(getPackage)(['foo']);
+  const actual = yield getIdealPackageTree(getPackage)(['foo@https://github.com/user/package#branch']);
   const expected = {
-    foo: {version: '1.0.0'},
+    foo: {version: 'github:user/package#branch'},
     bar: {version: '2.1.2'},
     bas: {version: '1.0.5'}
   };
@@ -58,7 +66,7 @@ test('packages w nested dependencies that are all unique', function * (t) {
 
 test('multiple compatible dependencies', function * (t) {
   const getPackage = setupGetPackage(Object.freeze({
-    foo: {
+    'foo': {
       name: 'foo', version: '1', dependencies: {
         bar: '^1.0.0'
       }
@@ -81,7 +89,7 @@ test('multiple compatible dependencies', function * (t) {
 
 test('multiple incompatible dependencies', function * (t) {
   const getPackage = setupGetPackage(Object.freeze({
-    foo: {
+    'foo': {
       name: 'foo', version: '1', dependencies: {
         bar: '^2.0.0'
       }
@@ -275,7 +283,7 @@ test('handling input in alphabetic order', function * (t) {
     },
     'foo@1.0.0': {name: 'foo', version: '1.0.0'},
     'foo@2.0.0': {name: 'foo', version: '2.0.0'},
-    input: {
+    'input': {
       name: 'input', version: '1.0.0', dependencies: {
         b: '1.0.0',
         a: '1.0.0'
