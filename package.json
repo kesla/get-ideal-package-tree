@@ -40,7 +40,6 @@
     "tapava": "^2.2.0"
   },
   "dependencies": {
-    "co": "^4.6.0",
     "get-package-json-from-registry": "^2.0.0",
     "immutable-object-methods": "^1.2.1",
     "object.entries": "^1.0.3"
